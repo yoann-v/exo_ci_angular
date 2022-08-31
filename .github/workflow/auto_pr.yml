@@ -1,0 +1,44 @@
+name: auto_pr
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - 'feature/**'
+
+jobs:
+  whis_branch_develop:
+    if: ${{github.ref_name == 'develop'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "C'est la branch develop ?"
+        run: echo "Branch develop OK"
+
+  test_version_node:
+    strategy:
+      matrix: 
+        version: [14, 16]
+    steps:
+      - uses: actions/setup-node@v3
+        with: 
+          node-version: ${{ matrix.version }}
+
+  confirme_branch_feature:
+    if: ${{startsWith('github.head.ref', 'feature/')}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "C'est un branch feature/ ?"
+        run: echo "C'est bien une feature"
+
+  upload_artifact:
+    name: Upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: créer le fichier coverage.txt
+        run: npm run test:coverage > coverage.txt
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Coverage
+          path: coverage.txt
