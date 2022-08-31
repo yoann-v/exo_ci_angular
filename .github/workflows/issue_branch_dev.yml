@@ -1,0 +1,16 @@
+name: issue branch for dev
+
+on:
+  issues:
+    types: [ assigned ]
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  creer_une_branch_avec_une_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: creer une branch issue
+        uses: feature/${{ github.event.issue.title }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
