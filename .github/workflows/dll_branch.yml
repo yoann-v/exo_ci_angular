@@ -1,0 +1,17 @@
+name: delete branch
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      [develop]
+        
+jobs:
+  delete_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete merged branch
+        uses: feature/delete-merged-action@master
+        with:
+          branches: "!master, !develop, *"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
